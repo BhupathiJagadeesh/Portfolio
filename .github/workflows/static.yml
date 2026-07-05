@@ -33,8 +33,14 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build portfolio
-        run: bun run build
+      - name: Check build output
+        run: |
+          echo "===== ROOT ====="
+          ls -la
+          echo "===== BUILD DIRECTORIES ====="
+          find . -maxdepth 4 -type d
+          echo "===== HTML FILES ====="
+          find . -maxdepth 5 -type f -name "*.html"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
