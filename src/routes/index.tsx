@@ -413,18 +413,18 @@ function Portfolio() {
                 <span className="ml-3 font-mono text-xs text-white/40">~/jagadeesh/portfolio.ts</span>
               </div>
               <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
-<span className="text-[#7C3AED]">const</span> <span className="text-[#00E5FF]">engineer</span> = {"{"}
-{"\n  "}<span className="text-white/60">name</span>: <span className="text-emerald-300">"JAGADEESH"</span>,
-{"\n  "}<span className="text-white/60">role</span>: <span className="text-emerald-300">"Full Stack Software Engineer"</span>,
-{"\n  "}<span className="text-white/60">speciality</span>: <span className="text-emerald-300">"Java Backend &amp; AI Automation"</span>,
-{"\n  "}<span className="text-white/60">services</span>: [
-{"\n    "}<span className="text-emerald-300">"Business Websites"</span>,
-{"\n    "}<span className="text-emerald-300">"Enterprise Software"</span>,
-{"\n    "}<span className="text-emerald-300">"AI Automation"</span>,
-{"\n  "}],
-{"\n  "}<span className="text-white/60">status</span>: <span className="text-emerald-300">"Available for Freelance"</span>,
-{"\n  "}<span className="text-white/60">ship</span>: () <span className="text-[#7C3AED]">=&gt;</span> <span className="text-[#00E5FF]">production</span>,
-{"\n"}{"}"};
+                <span className="text-[#7C3AED]">const</span> <span className="text-[#00E5FF]">engineer</span> = {"{"}
+                {"\n  "}<span className="text-white/60">name</span>: <span className="text-emerald-300">"JAGADEESH"</span>,
+                {"\n  "}<span className="text-white/60">role</span>: <span className="text-emerald-300">"Full Stack Software Engineer"</span>,
+                {"\n  "}<span className="text-white/60">speciality</span>: <span className="text-emerald-300">"Java Backend &amp; AI Automation"</span>,
+                {"\n  "}<span className="text-white/60">services</span>: [
+                {"\n    "}<span className="text-emerald-300">"Business Websites"</span>,
+                {"\n    "}<span className="text-emerald-300">"Enterprise Software"</span>,
+                {"\n    "}<span className="text-emerald-300">"AI Automation"</span>,
+                {"\n  "}],
+                {"\n  "}<span className="text-white/60">status</span>: <span className="text-emerald-300">"Available for Freelance"</span>,
+                {"\n  "}<span className="text-white/60">ship</span>: () <span className="text-[#7C3AED]">=&gt;</span> <span className="text-[#00E5FF]">production</span>,
+                {"\n"}{"}"};
               </pre>
             </div>
           </motion.div>
@@ -860,26 +860,51 @@ function Portfolio() {
       <Section id="contact" eyebrow="Contact" title="Let's talk about your project." subtitle="Reply within 24 hours. Free 30-minute discovery call for every serious inquiry.">
         <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
           <form
-            onSubmit={(e) => { e.preventDefault(); alert("Thanks! I'll be in touch shortly."); }}
+            onSubmit={async (e) => {
+              e.preventDefault();
+
+              const form = e.currentTarget;
+              const formData = new FormData(form);
+
+              const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  name: formData.get("name"),
+                  email: formData.get("email"),
+                  project: formData.get("project"),
+                  message: formData.get("message"),
+                }),
+              });
+
+              if (response.ok) {
+                alert("Thanks! I'll be in touch shortly.");
+                form.reset();
+              } else {
+                alert("Something went wrong. Please try again.");
+              }
+            }}
             className="rounded-3xl glass-strong p-8 md:p-10"
           >
             <div className="grid gap-5 md:grid-cols-2">
               <div>
                 <label className="mb-2 block text-xs uppercase tracking-widest text-white/50">Name</label>
-                <input required maxLength={100} className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none transition focus:border-[#00E5FF]/60 focus:bg-white/[0.05]" placeholder="Your name" />
+                <input  name="name" required maxLength={100} className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none transition focus:border-[#00E5FF]/60 focus:bg-white/[0.05]" placeholder="Your name" />
               </div>
               <div>
                 <label className="mb-2 block text-xs uppercase tracking-widest text-white/50">Email</label>
-                <input required type="email" maxLength={255} className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none transition focus:border-[#00E5FF]/60 focus:bg-white/[0.05]" placeholder="you@company.com" />
+                <input name="email" required type="email" maxLength={255} className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none transition focus:border-[#00E5FF]/60 focus:bg-white/[0.05]" placeholder="you@company.com" />
               </div>
             </div>
             <div className="mt-5">
               <label className="mb-2 block text-xs uppercase tracking-widest text-white/50">Project</label>
-              <input maxLength={200} className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none transition focus:border-[#00E5FF]/60 focus:bg-white/[0.05]" placeholder="Business website, enterprise app, AI automation…" />
+              <input name="project" maxLength={200} className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none transition focus:border-[#00E5FF]/60 focus:bg-white/[0.05]" placeholder="Business website, enterprise app, AI automation…" />
             </div>
             <div className="mt-5">
               <label className="mb-2 block text-xs uppercase tracking-widest text-white/50">Message</label>
-              <textarea required maxLength={1000} rows={5} className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none transition focus:border-[#00E5FF]/60 focus:bg-white/[0.05]" placeholder="Tell me about the problem…" />
+              <textarea name="message" required maxLength={1000} rows={5} className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm outline-none transition focus:border-[#00E5FF]/60 focus:bg-white/[0.05]" placeholder="Tell me about the problem…" />
             </div>
             <button type="submit" className="group mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#00E5FF] to-[#7C3AED] px-6 py-3.5 font-semibold text-[#050816] transition hover:scale-[1.02] glow-cyan">
               Send message <Send className="h-4 w-4 transition group-hover:translate-x-1" />
